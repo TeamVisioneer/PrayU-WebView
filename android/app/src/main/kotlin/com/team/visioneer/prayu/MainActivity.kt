@@ -1,4 +1,4 @@
-package com.example.prayu_webview
+package com.team.visioneer.prayu
 
 import io.flutter.embedding.android.FlutterActivity
 
