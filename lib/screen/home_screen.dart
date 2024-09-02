@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 final homeUrl = Uri.parse('https://prayu.vercel.app/');
 
@@ -9,6 +10,7 @@ class HomeScreen extends StatelessWidget {
   HomeScreen({super.key})
       : controller = WebViewController()
     ..setJavaScriptMode(JavaScriptMode.unrestricted)
+    ..setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36')
     ..loadRequest(homeUrl);
 
   @override
