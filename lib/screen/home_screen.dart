@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:kakao_flutter_sdk/kakao_flutter_sdk.dart';
 import 'package:webview_flutter/webview_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter/services.dart';
 
 final homeUrl = Uri.parse('https://prayu.vercel.app/');
 
@@ -10,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  static const platform = MethodChannel('com.yourcompany.app/scheme_intent');
   late final WebViewController _controller;
 
   @override
@@ -17,9 +19,28 @@ class _HomeScreenState extends State<HomeScreen> {
     super.initState();
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
-      ..setUserAgent(
-          'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36')
+      ..setNavigationDelegate(NavigationDelegate(
+        onNavigationRequest: (NavigationRequest request) {
+          if (request.url.startsWith('intent://')) {
+            // intent://로 시작하는 URL을 가로채어 네이티브 코드로 처리
+            _launchIntentURL(request.url);
+            return NavigationDecision.prevent;
+          }
+          return NavigationDecision.navigate;
+        },
+      ))
       ..loadRequest(homeUrl);
+  }
+
+  Future<void> _launchIntentURL(String url) async {
+    try {
+      final bool result = await platform.invokeMethod('startSchemeIntent', {'url': url});
+      if (!result) {
+        print('Could not launch the intent');
+      }
+    } on PlatformException catch (e) {
+      print("Failed to launch intent: '${e.message}'.");
+    }
   }
 
   @override
