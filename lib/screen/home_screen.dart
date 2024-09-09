@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/services.dart';
 
+// final homeUrl = Uri.parse('http://172.20.10.2:5173/');
 final homeUrl = Uri.parse('https://prayu.vercel.app/');
 
 class HomeScreen extends StatefulWidget {
@@ -21,7 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ..setNavigationDelegate(NavigationDelegate(
         onNavigationRequest: (NavigationRequest request) {
           if (request.url.startsWith('intent://')) {
-            // intent://로 시작하는 URL을 가로채어 네이티브 코드로 처리
+            /* intent://로 시작하는 URL을 가로채어 네이티브 코드로 처리 */
             _launchIntentURL(request.url);
             return NavigationDecision.prevent;
           }
@@ -48,11 +49,12 @@ class _HomeScreenState extends State<HomeScreen> {
       onWillPop: () async {
         if (await _controller.canGoBack()) {
           _controller.goBack();
-          return false; // 웹뷰에서 뒤로가기를 수행하고, 앱의 뒤로가기 동작을 막음
+          return false; /* 웹뷰에서 뒤로가기를 수행하고, 앱의 뒤로가기 동작을 막음 */
         }
-        return true; // 앱의 기본 뒤로가기 동작을 수행
+        return true; /* 앱의 기본 뒤로가기 동작을 수행 */
       },
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           backgroundColor: Colors.blue,
           title: const Text('PrayU'),
