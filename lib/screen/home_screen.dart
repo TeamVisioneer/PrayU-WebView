@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/services.dart';
 
-// final homeUrl = Uri.parse('http://172.20.10.2:5173/');
-final homeUrl = Uri.parse('https://prayu-staging.vercel.app/group/5d448dc0-0518-4e3d-997e-6664d18a27f7');
-
+final homeUrl = Uri.parse('https://prayu-staging.vercel.app/');
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -41,7 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _launchIntentURL(String url) async {
     try {
-      final bool result = await platform.invokeMethod('startSchemeIntent', {'url': url});
+      final bool result =
+          await platform.invokeMethod('startSchemeIntent', {'url': url});
       if (!result) {
         print('Could not launch the intent');
       }
@@ -51,15 +50,13 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   String? parseKakaoIntentUrl(String intentUri) {
-    // 'S.browser_fallback_url=' 뒤의 URL을 추출
     final startIndex = intentUri.indexOf('S.browser_fallback_url=');
     if (startIndex == -1) return null;
 
-    // 추출한 fallback_url 부분을 디코딩
-    final encodedFallbackUrl = intentUri.substring(startIndex + 'S.browser_fallback_url='.length);
+    final encodedFallbackUrl =
+        intentUri.substring(startIndex + 'S.browser_fallback_url='.length);
     final fallbackUrl = Uri.decodeComponent(encodedFallbackUrl);
 
-    // 파싱된 fallback URL에서 쿼리 파라미터 추출
     Uri parsedUri = Uri.parse(fallbackUrl);
     String clientId = parsedUri.queryParameters['client_id'] ?? '';
     String scope = parsedUri.queryParameters['scope'] ?? '';
@@ -70,7 +67,6 @@ class _HomeScreenState extends State<HomeScreen> {
     String ka = parsedUri.queryParameters['ka'] ?? '';
     String isPopup = parsedUri.queryParameters['is_popup'] ?? 'false';
 
-    // 새로운 URL 생성
     Uri newUri = Uri.https('kauth.kakao.com', '/oauth/authorize', {
       'client_id': clientId,
       'scope': scope,
@@ -97,10 +93,12 @@ class _HomeScreenState extends State<HomeScreen> {
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
-          backgroundColor: Colors.blue,
-          title: const Text('PrayU'),
-          centerTitle: true,
+        appBar: PreferredSize(
+          preferredSize: Size.fromHeight(30.0), // Adjust the height
+          child: AppBar(
+            backgroundColor: Color(0xFFF2F3FD),
+            centerTitle: true,
+          ),
         ),
         body: WebViewWidget(
           controller: _controller,
