@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/services.dart';
+import 'dart:io';
 
-final homeUrl = Uri.parse('https://prayu-staging.vercel.app/');
+final homeUrl = Uri.parse('http://169.254.38.63:5173/');
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -35,6 +37,10 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ))
       ..loadRequest(homeUrl);
+
+    if (Platform.isIOS) {
+      _controller.setUserAgent('ios_app');
+    }
   }
 
   Future<void> _launchIntentURL(String url) async {
