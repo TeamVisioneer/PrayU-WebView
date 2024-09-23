@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/services.dart';
+import 'dart:io';
 
-final homeUrl = Uri.parse('https://prayu-staging.vercel.app/');
+final homeUrl = Uri.parse('http://www.prayu.site');
+
 class HomeScreen extends StatefulWidget {
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -14,6 +16,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+
     super.initState();
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -33,8 +36,23 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           return NavigationDecision.navigate;
         },
-      ))
-      ..loadRequest(homeUrl);
+      ));
+    if (Platform.isIOS) {
+      _setUserAgentAndLoadPage();
+    } else {
+      _controller.loadRequest(homeUrl);
+    }
+  }
+
+  Future<void> _setUserAgentAndLoadPage() async {
+    String? defaultUserAgent = await _controller
+        .runJavaScriptReturningResult('navigator.userAgent') as String?;
+
+    defaultUserAgent ??= '';
+
+    final newUserAgent = '$defaultUserAgent prayu-ios';
+    await _controller.setUserAgent(newUserAgent);
+    _controller.loadRequest(homeUrl);
   }
 
   Future<void> _launchIntentURL(String url) async {
@@ -94,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(30.0), // Adjust the height
+          preferredSize: Size.fromHeight(0.0), // Adjust the height
           child: AppBar(
             backgroundColor: Color(0xFFF2F3FD),
             centerTitle: true,
