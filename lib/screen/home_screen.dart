@@ -3,7 +3,8 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 
-final homeUrl = Uri.parse('http://169.254.38.63:5173/');
+
+final homeUrl = Uri.parse('http://169.254.48.183:5173/');
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -12,10 +13,16 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   static const platform = MethodChannel('com.yourcompany.app/scheme_intent');
+
   late final WebViewController _controller;
 
   @override
   void initState() {
+    Uri homeUrlWithPlatform = homeUrl.replace(queryParameters: {
+      ...homeUrl.queryParameters,
+      'platform': Platform.isIOS ? 'ios' : 'other',
+    });
+
     super.initState();
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
@@ -36,11 +43,7 @@ class _HomeScreenState extends State<HomeScreen> {
           return NavigationDecision.navigate;
         },
       ))
-      ..loadRequest(homeUrl);
-
-    if (Platform.isIOS) {
-      _controller.setUserAgent('ios_app');
-    }
+      ..loadRequest(homeUrlWithPlatform);
   }
 
   Future<void> _launchIntentURL(String url) async {
