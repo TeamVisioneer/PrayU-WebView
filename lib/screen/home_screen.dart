@@ -3,7 +3,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 
-final homeUrl = Uri.parse('http://169.254.48.183:5173/');
+final homeUrl = Uri.parse('http://www.prayu.site');
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -112,7 +112,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: PreferredSize(
-          preferredSize: Size.fromHeight(30.0), // Adjust the height
+          preferredSize: Size.fromHeight(0.0), // Adjust the height
           child: AppBar(
             backgroundColor: Color(0xFFF2F3FD),
             centerTitle: true,
