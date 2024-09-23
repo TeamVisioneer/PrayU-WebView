@@ -3,7 +3,7 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 
-final homeUrl = Uri.parse('http://www.prayu.site');
+final homeUrl = Uri.parse('https://www.prayu.site');
 
 class HomeScreen extends StatefulWidget {
   @override
