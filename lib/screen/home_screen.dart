@@ -3,7 +3,6 @@ import 'package:webview_flutter/webview_flutter.dart';
 import 'package:flutter/services.dart';
 import 'dart:io';
 
-
 final homeUrl = Uri.parse('http://169.254.48.183:5173/');
 
 class HomeScreen extends StatefulWidget {
@@ -13,15 +12,10 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   static const platform = MethodChannel('com.yourcompany.app/scheme_intent');
-
   late final WebViewController _controller;
 
   @override
   void initState() {
-    Uri homeUrlWithPlatform = homeUrl.replace(queryParameters: {
-      ...homeUrl.queryParameters,
-      'platform': Platform.isIOS ? 'ios' : 'other',
-    });
 
     super.initState();
     _controller = WebViewController()
@@ -42,8 +36,23 @@ class _HomeScreenState extends State<HomeScreen> {
           }
           return NavigationDecision.navigate;
         },
-      ))
-      ..loadRequest(homeUrlWithPlatform);
+      ));
+    if (Platform.isIOS) {
+      _setUserAgentAndLoadPage();
+    } else {
+      _controller.loadRequest(homeUrl);
+    }
+  }
+
+  Future<void> _setUserAgentAndLoadPage() async {
+    String? defaultUserAgent = await _controller
+        .runJavaScriptReturningResult('navigator.userAgent') as String?;
+
+    defaultUserAgent ??= '';
+
+    final newUserAgent = '$defaultUserAgent prayu-ios';
+    await _controller.setUserAgent(newUserAgent);
+    _controller.loadRequest(homeUrl);
   }
 
   Future<void> _launchIntentURL(String url) async {
