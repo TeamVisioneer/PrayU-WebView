@@ -1,17 +1,17 @@
 {
   "images" : [
     {
-      "filename" : "background.png",
-      "idiom" : "universal",
-      "scale" : "1x"
+      "filename" : "LaunchBackground.png",
+      "idiom" : "universal"
     },
     {
-      "idiom" : "universal",
-      "scale" : "2x"
-    },
-    {
-      "idiom" : "universal",
-      "scale" : "3x"
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "idiom" : "universal"
     }
   ],
   "info" : {
