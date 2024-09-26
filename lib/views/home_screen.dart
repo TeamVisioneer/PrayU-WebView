@@ -9,6 +9,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final WebViewViewModel _viewModel = WebViewViewModel();
+  double initialSwipePosition = 0.0;
+  double swipeThreshold = 110.0; // Adjust the threshold as needed
 
   @override
   void initState() {
@@ -29,10 +31,27 @@ class _HomeScreenState extends State<HomeScreen> {
             centerTitle: true,
           ),
         ),
-        body: WebViewWidget(
-          controller: _viewModel.controller,
+        body: GestureDetector(
+          onHorizontalDragStart: (details) {
+            initialSwipePosition = details.localPosition.dx;
+          },
+          onHorizontalDragUpdate: (details) {
+            double swipeDistance = details.localPosition.dx - initialSwipePosition;
+            if (swipeDistance > swipeThreshold) {
+              _handleSwipeBack();
+            }
+          },
+          child: WebViewWidget(
+            controller: _viewModel.controller,
+          ),
         ),
       ),
     );
+  }
+
+  void _handleSwipeBack() async {
+    if (await _viewModel.controller.canGoBack()) {
+      _viewModel.controller.goBack();
+    }
   }
 }
