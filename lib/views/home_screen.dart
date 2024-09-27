@@ -10,7 +10,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final WebViewViewModel _viewModel = WebViewViewModel();
   double initialSwipePosition = 0.0;
-  double swipeThreshold = 110.0; // Adjust the threshold as needed
+  double swipeThreshold = 120.0;
+  bool isNavigating = false;
 
   @override
   void initState() {
@@ -20,6 +21,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
     return WillPopScope(
       onWillPop: _viewModel.handleBackNavigation,
       child: Scaffold(
@@ -31,13 +34,14 @@ class _HomeScreenState extends State<HomeScreen> {
             centerTitle: true,
           ),
         ),
-        body: GestureDetector(
-          onHorizontalDragStart: (details) {
-            initialSwipePosition = details.localPosition.dx;
+        body: Listener(
+          onPointerDown: (details) {
+            initialSwipePosition = details.position.dx;
           },
-          onHorizontalDragUpdate: (details) {
-            double swipeDistance = details.localPosition.dx - initialSwipePosition;
-            if (swipeDistance > swipeThreshold) {
+          onPointerMove: (details) {
+            double swipeDistance = details.position.dx - initialSwipePosition;
+
+            if (initialSwipePosition <= screenWidth / 10 && swipeDistance > swipeThreshold) {
               _handleSwipeBack();
             }
           },
@@ -50,8 +54,12 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _handleSwipeBack() async {
-    if (await _viewModel.controller.canGoBack()) {
+    if (!isNavigating && await _viewModel.controller.canGoBack()) {
+      isNavigating = true; // 뒤로 가기 시작
       _viewModel.controller.goBack();
+      Future.delayed(const Duration(milliseconds: 500), () {
+        isNavigating = false;
+      });
     }
   }
 }
