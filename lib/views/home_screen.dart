@@ -36,14 +36,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         body: Listener(
           onPointerDown: (details) {
-            initialSwipePosition = details.position.dx;
+            _viewModel.onSwipeStart(details);
           },
           onPointerMove: (details) {
-            double swipeDistance = details.position.dx - initialSwipePosition;
-
-            if (initialSwipePosition <= screenWidth / 10 && swipeDistance > swipeThreshold) {
-              _handleSwipeBack();
-            }
+            _viewModel.onSwipeUpdate(details, screenWidth);
           },
           child: WebViewWidget(
             controller: _viewModel.controller,
@@ -51,15 +47,5 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
-  }
-
-  void _handleSwipeBack() async {
-    if (!isNavigating && await _viewModel.controller.canGoBack()) {
-      isNavigating = true; // 뒤로 가기 시작
-      _viewModel.controller.goBack();
-      Future.delayed(const Duration(milliseconds: 500), () {
-        isNavigating = false;
-      });
-    }
   }
 }

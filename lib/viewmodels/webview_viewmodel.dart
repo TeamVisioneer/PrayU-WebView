@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:io';
@@ -7,6 +8,9 @@ class WebViewViewModel {
   final WebViewModel model = WebViewModel();
   late WebViewController _controller;
   static const platform = MethodChannel('com.yourcompany.app/scheme_intent');
+  double initialSwipePosition = 0.0;
+  double swipeThreshold = 120.0;
+  bool isNavigating = false;
 
   WebViewController get controller => _controller;
 
@@ -33,6 +37,19 @@ class WebViewViewModel {
       _setUserAgentAndLoadPage();
     } else {
       _controller.loadRequest(model.homeUrl);
+    }
+  }
+
+  void onSwipeStart(PointerDownEvent details) {
+    initialSwipePosition = details.position.dx;
+  }
+
+  void onSwipeUpdate(PointerMoveEvent details, double screenWidth) async {
+    double swipeDistance = details.position.dx - initialSwipePosition;
+
+    if (initialSwipePosition <= screenWidth / 10 &&
+        swipeDistance > swipeThreshold) {
+      await _handleSwipeBack();
     }
   }
 
@@ -97,5 +114,15 @@ class WebViewViewModel {
       return false;
     }
     return true;
+  }
+
+  Future<void> _handleSwipeBack() async {
+    if (!isNavigating && await _controller.canGoBack()) {
+      isNavigating = true;
+      _controller.goBack();
+      Future.delayed(const Duration(milliseconds: 500), () {
+        isNavigating = false;
+      });
+    }
   }
 }
