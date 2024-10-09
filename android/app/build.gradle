@@ -29,6 +29,9 @@ if (keystorePropertiesFile.exists()) {
     keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
+def FACEBOOK_APP_ID = localProperties.getProperty("FACEBOOK_APP_ID")
+def FACEBOOK_CLIENT_TOKEN = localProperties.getProperty("FACEBOOK_CLIENT_TOKEN")
+
 android {
     namespace = "com.team.visioneer.prayu"
     compileSdk = flutter.compileSdkVersion
@@ -48,6 +51,9 @@ android {
         targetSdk = flutter.targetSdkVersion
         versionCode = flutterVersionCode.toInteger()
         versionName = flutterVersionName
+        multiDexEnabled true
+        manifestPlaceholders["FACEBOOK_APP_ID"] = FACEBOOK_APP_ID
+        manifestPlaceholders["FACEBOOK_CLIENT_TOKEN"] = FACEBOOK_CLIENT_TOKEN
     }
     signingConfigs {
         release {
