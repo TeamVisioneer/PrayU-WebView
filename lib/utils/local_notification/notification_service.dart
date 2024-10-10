@@ -33,7 +33,7 @@ class NotificationService {
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
 
     AndroidInitializationSettings android =
-        const AndroidInitializationSettings("@mipmap/ic_launcher");
+        const AndroidInitializationSettings("@mipmap/launcher_icon");
     DarwinInitializationSettings ios = const DarwinInitializationSettings(
       requestSoundPermission: false,
       requestBadgePermission: false,
@@ -45,10 +45,11 @@ class NotificationService {
     await _localNotificationsPlugin.initialize(settings);
     await requestNotificationPermissions();
     await showNotification();
+    await PeriodicNotification();
     await scheduleDailyNotification(
       0,
       20,
-      1,
+      9,
       "PrayU",
       "오늘도 기도로 하루를 마무리 해볼까요 😊",
     );
@@ -67,8 +68,18 @@ class NotificationService {
     await _localNotificationsPlugin.show(
       1, // 알림 ID
       "PrayU", // 알림 제목
-      "오늘도 기도로 하루를 마무리 해볼까요 😊", // 알림 내용
+      "대문😊", // 알림 내용
       _notificationDetails, // 알림 설정
+    );
+  }
+
+  static Future<void> PeriodicNotification() async {
+    await _localNotificationsPlugin.periodicallyShow(
+      2,
+      "PrayU",
+      "귀찮지>?",
+      RepeatInterval.everyMinute,
+      _notificationDetails,
     );
   }
 
