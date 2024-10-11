@@ -11,6 +11,21 @@
         android:name="${applicationName}"
         android:icon="@mipmap/launcher_icon"
         android:usesCleartextTraffic="true">
+
+        <activity
+            android:name="com.kakao.sdk.flutter.AuthCodeCustomTabsActivity"
+            android:exported="true">
+            <intent-filter android:label="flutter_web_auth">
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- "kakao${YOUR_NATIVE_APP_KEY}://oauth" 형식의 앱 실행 스킴 설정 -->
+                <!-- 카카오 로그인 Redirect URI -->
+                <data android:scheme="kakao57583aa0c3464bf71e902b9c78580e5b" android:host="oauth"/>
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -35,16 +50,27 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
 
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- "kakao${YOUR_NATIVE_APP_KEY}://${PRODUCT_NAME}" 형식의 앱 실행 스킴 설정 -->
+                <!-- 카카오톡 공유, 카카오톡 메시지 -->
+                <data android:host="kakaolink"
+                    android:scheme="kakao57583aa0c3464bf71e902b9c78580e5b" />
+            </intent-filter>
+
         </activity>
         <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver" />
-<receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver" >
-	<intent-filter>
-		<action android:name="android.intent.action.BOOT_COMPLETED"/>
-		<action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
-		<action android:name="android.intent.action.QUICKBOOT_POWERON" />
-		<action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
-	</intent-filter>
-</receiver>
+        <receiver android:exported="false" android:name="com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver" >
+	        <intent-filter>
+		        <action android:name="android.intent.action.BOOT_COMPLETED"/>
+		        <action android:name="android.intent.action.MY_PACKAGE_REPLACED"/>
+		        <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+		        <action android:name="com.htc.intent.action.QUICKBOOT_POWERON"/>
+	        </intent-filter>
+        </receiver>
         <!-- Don't delete the meta-data below.
              This is used by the Flutter tool to generate GeneratedPluginRegistrant.java -->
         <meta-data
@@ -55,6 +81,7 @@
         <meta-data android:name="com.facebook.sdk.ClientToken"
             android:value="${FACEBOOK_CLIENT_TOKEN}"/>
     </application>
+    <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Required to query activities that can process text, see:
          https://developer.android.com/training/package-visibility and
          https://developer.android.com/reference/android/content/Intent#ACTION_PROCESS_TEXT.
@@ -65,8 +92,7 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
-    </queries>
-    <queries>
-        <package android:name="com.kakao.talk" /> <!-- 카카오페이 -->
+        <package android:name="com.kakao.talk" />
+
     </queries>
 </manifest>

@@ -7,7 +7,7 @@ import '../models/webview_model.dart';
 class WebViewViewModel {
   final WebViewModel model = WebViewModel();
   late WebViewController _controller;
-  static const platform = MethodChannel('com.yourcompany.app/scheme_intent');
+  static const platform = MethodChannel('com.team.visioneer.prayu/scheme_intent');
   double initialSwipePosition = 0.0;
   double swipeThreshold = 120.0;
   bool isNavigating = false;
@@ -19,14 +19,9 @@ class WebViewViewModel {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(NavigationDelegate(
         onNavigationRequest: (NavigationRequest request) {
-          if (request.url.startsWith('intent://')) {
-            _launchIntentURL(request.url);
-            return NavigationDecision.prevent;
-          } else if (request.url.startsWith('intent:#')) {
-            String? newUrl = parseKakaoIntentUrl(request.url);
-            if (newUrl != null) {
-              _controller.loadRequest(Uri.parse(newUrl));
-            }
+          if (request.url.startsWith('intent://') || request.url.startsWith('intent:#')) {
+            print('Intent URL detected: ${request.url}');
+            _launchIntentURL(request.url);  // intent://와 intent:#를 동일하게 처리
             return NavigationDecision.prevent;
           }
           return NavigationDecision.navigate;
@@ -66,6 +61,7 @@ class WebViewViewModel {
 
   Future<void> _launchIntentURL(String url) async {
     try {
+      print('Launching intent URL: $url');
       final bool result =
           await platform.invokeMethod('startSchemeIntent', {'url': url});
       if (!result) {

@@ -393,7 +393,7 @@ packages:
     source: hosted
     version: "1.9.6"
   kakao_flutter_sdk_friend:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: kakao_flutter_sdk_friend
       sha256: d749a9dc867ac9c77013d9f8504b03a971843659969baad6bcb94fbd4be8bcd3
@@ -409,7 +409,7 @@ packages:
     source: hosted
     version: "1.9.6"
   kakao_flutter_sdk_share:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: kakao_flutter_sdk_share
       sha256: f5502f51f2c9d2f69f29ab258e0379ad3eb4a588ce606640dd6a8105d96525a4
@@ -417,7 +417,7 @@ packages:
     source: hosted
     version: "1.9.6"
   kakao_flutter_sdk_talk:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: kakao_flutter_sdk_talk
       sha256: d13ef12ba6ec6e1a7d510834eebfbf15c0c902807873d404d7b1f05f48f9c253
@@ -433,7 +433,7 @@ packages:
     source: hosted
     version: "1.9.6"
   kakao_flutter_sdk_user:
-    dependency: "direct main"
+    dependency: transitive
     description:
       name: kakao_flutter_sdk_user
       sha256: f3692feefad530bcfcdd1b8cf685b0c2c3da4a6d28a7df7f57529e57b7040f1b

@@ -10,7 +10,7 @@ import io.flutter.plugin.common.MethodChannel
 import java.net.URISyntaxException
 
 class MainActivity : FlutterActivity() {
-    private val CHANNEL = "com.yourcompany.app/scheme_intent"
+    private val CHANNEL = "com.team.visioneer.prayu/scheme_intent"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,22 +34,28 @@ class MainActivity : FlutterActivity() {
     }
 
     private fun startSchemeIntent(url: String): Boolean {
-        val schemeIntent: Intent = try {
-            Intent.parseUri(url, Intent.URI_INTENT_SCHEME) // Intent 스킴을 파싱
+        return try {
+            // 'intent://'로 시작하는 URL을 처리
+            val schemeIntent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME)
+
+            // 앱이 설치되어 있으면 해당 앱으로 이동
+            startActivity(schemeIntent)
+            true
         } catch (e: URISyntaxException) {
-            return false
-        }
-        try {
-            startActivity(schemeIntent) // 앱으로 이동
-            return true
-        } catch (e: ActivityNotFoundException) { // 앱이 설치 안 되어 있는 경우
-            startActivity(
-                Intent(
+            Log.e("MainActivity", "URI Syntax Error: $e")
+            false
+        } catch (e: ActivityNotFoundException) {
+            // 앱이 설치되어 있지 않은 경우 Play 스토어로 이동
+            try {
+                val storeIntent = Intent(
                     Intent.ACTION_VIEW,
-                    Uri.parse("market://details?id=com.kakao.talk") // 스토어로 이동
+                    Uri.parse("market://details?id=com.kakao.talk")
                 )
-            )
+                startActivity(storeIntent)
+            } catch (ex: ActivityNotFoundException) {
+                Log.e("MainActivity", "Play Store not found: $ex")
+            }
+            false
         }
-        return false
     }
 }
