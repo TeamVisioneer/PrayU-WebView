@@ -2,7 +2,7 @@ name: prayu_webview
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
-publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+publish_to: "none" # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -19,7 +19,7 @@ publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 version: 1.0.1+0
 
 environment:
-  sdk: '>=3.4.3 <4.0.0'
+  sdk: ">=3.4.3 <4.0.0"
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -32,7 +32,6 @@ dependencies:
     sdk: flutter
   url_launcher: ^6.0.20
 
-
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
@@ -41,6 +40,12 @@ dependencies:
   flutter_native_splash: ^2.4.1
   supabase_flutter: ^2.6.0
   facebook_app_events: ^0.19.3
+
+  # The follwing adds are for local notification
+  # permission_handler: ^11.1.0
+  flutter_local_notifications: ^17.2.2
+  timezone: ^0.9.0
+  permission_handler: ^11.1.0
 
 dev_dependencies:
   flutter_launcher_icons: "^0.13.1"
@@ -66,7 +71,6 @@ flutter_launcher_icons:
 
 # The following section is specific to Flutter packages.
 flutter:
-
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
