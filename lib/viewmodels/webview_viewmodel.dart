@@ -21,7 +21,7 @@ class WebViewViewModel {
         onNavigationRequest: (NavigationRequest request) {
           if (request.url.startsWith('intent://') || request.url.startsWith('intent:#')) {
             print('Intent URL detected: ${request.url}');
-            _launchIntentURL(request.url);  // intent://와 intent:#를 동일하게 처리
+            _launchIntentURL(request.url);
             return NavigationDecision.prevent;
           }
           return NavigationDecision.navigate;
@@ -61,14 +61,11 @@ class WebViewViewModel {
 
   Future<void> _launchIntentURL(String url) async {
     try {
-      print('Launching intent URL: $url');
       final bool result =
           await platform.invokeMethod('startSchemeIntent', {'url': url});
       if (!result) {
-        print('Could not launch the intent');
       }
     } on PlatformException catch (e) {
-      print("Failed to launch intent: '${e.message}'.");
     }
   }
 
