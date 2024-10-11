@@ -33,7 +33,7 @@ class NotificationService {
     tz.setLocalLocation(tz.getLocation('Asia/Seoul'));
 
     AndroidInitializationSettings android =
-        const AndroidInitializationSettings("@mipmap/launcher_icon");
+        const AndroidInitializationSettings("@drawable/notification_icon");
     DarwinInitializationSettings ios = const DarwinInitializationSettings(
       requestSoundPermission: false,
       requestBadgePermission: false,
