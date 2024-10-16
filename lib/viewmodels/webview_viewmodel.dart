@@ -50,7 +50,8 @@ class WebViewViewModel {
 
     defaultUserAgent ??= '';
 
-    final newUserAgent = '$defaultUserAgent prayu-ios';
+    final platformUserAgent = Platform.isIOS ? 'prayu-ios' : 'prayu-android';
+    final newUserAgent = '$defaultUserAgent prayu $platformUserAgent';
     await _controller.setUserAgent(newUserAgent);
     _controller.loadRequest(model.homeUrl);
   }
@@ -60,7 +61,7 @@ class WebViewViewModel {
       final bool result =
           await platform.invokeMethod('startSchemeIntent', {'url': url});
       if (!result) {}
-    } on PlatformException catch (e) {}
+    } on PlatformException {}
   }
 
   Future<bool> handleBackNavigation() async {
