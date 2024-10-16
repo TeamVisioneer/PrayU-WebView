@@ -50,7 +50,9 @@ class WebViewViewModel {
 
     defaultUserAgent ??= '';
 
-    final newUserAgent = '$defaultUserAgent prayu-ios';
+    final platformUserAgent = Platform.isIOS ? 'prayu-ios' : 'prayu-android';
+    final newUserAgent = '$defaultUserAgent prayu $platformUserAgent';
+
     await _controller.setUserAgent(newUserAgent);
     _controller.loadRequest(model.homeUrl);
   }
