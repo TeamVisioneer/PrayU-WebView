@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -18,6 +20,18 @@ class WebViewViewModel {
   void initWebView() {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
+      ..addJavaScriptChannel(
+        'LoginSuccess',
+        onMessageReceived: (message) {
+          try {
+            final decodedMessage = jsonDecode(message.message);
+            final userId = decodedMessage['userId'];
+            print("Login Successful: userId = $userId");
+          } catch (e) {
+            debugPrint("Error decoding JSON: $e");
+          }
+        },
+      )
       ..setNavigationDelegate(NavigationDelegate(
         onNavigationRequest: (NavigationRequest request) {
           if (request.url.startsWith('intent://') ||
