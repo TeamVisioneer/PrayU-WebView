@@ -44,8 +44,8 @@ class NotificationService {
 
     await _localNotificationsPlugin.initialize(settings);
     await requestNotificationPermissions();
-    await showNotification();
-    await PeriodicNotification();
+    //await showNotification();
+    //await PeriodicNotification();
     await scheduleDailyNotification(
       0,
       20,
