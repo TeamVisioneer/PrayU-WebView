@@ -48,8 +48,15 @@ class NotificationService {
     //await PeriodicNotification();
     await scheduleDailyNotification(
       0,
-      20,
-      9,
+      8,
+      0,
+      "PrayU",
+      "오늘도 기도로 하루를 시작해봐요 🙏",
+    );
+    await scheduleDailyNotification(
+      0,
+      23,
+      0,
       "PrayU",
       "오늘도 기도로 하루를 마무리 해볼까요 😊",
     );
@@ -68,7 +75,7 @@ class NotificationService {
     await _localNotificationsPlugin.show(
       1, // 알림 ID
       "PrayU", // 알림 제목
-      "대문😊", // 알림 내용
+      "입장시 알람", // 알림 내용
       _notificationDetails, // 알림 설정
     );
   }
@@ -77,7 +84,7 @@ class NotificationService {
     await _localNotificationsPlugin.periodicallyShow(
       2,
       "PrayU",
-      "귀찮지>?",
+      "주기적 알람",
       RepeatInterval.everyMinute,
       _notificationDetails,
     );
