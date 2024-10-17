@@ -28,8 +28,11 @@ class WebViewViewModel {
           }
           return NavigationDecision.navigate;
         },
+        onPageFinished: (url) {
+          _saveFCMTokenToLocalStorage();
+        },
       ));
-    _saveFCMTokenToLocalStorage();
+
     _setUserAgentAndLoadPage();
   }
 
@@ -37,7 +40,7 @@ class WebViewViewModel {
     try {
       if (fcmToken != null) {
         _controller.runJavaScript(
-          'localStorage.setItem("fcmToken", "$fcmToken")',
+          'try { localStorage.setItem("fcmToken", "$fcmToken"); } catch (e) { console.error("Error storing FCM token:", e.message); }',
         );
         debugPrint("FCM token saved to localStorage: $fcmToken");
       } else {

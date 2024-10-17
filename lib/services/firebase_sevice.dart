@@ -11,7 +11,7 @@ Future<void> initFirebaseAndLocalNotifications() async {
   await Firebase.initializeApp();
 
   const AndroidInitializationSettings initializationSettingsAndroid =
-      AndroidInitializationSettings('@mipmap/ic_launcher');
+      AndroidInitializationSettings('@drawable/notification_icon');
 
   const DarwinInitializationSettings initializationSettingsIOS =
       DarwinInitializationSettings(
@@ -47,6 +47,8 @@ Future<void> showNotification(RemoteMessage message) async {
     'your_channel_id', // 알림 채널 ID
     'your_channel_name', // 알림 채널 이름
     channelDescription: 'your_channel_description', // 알림 채널 설명
+    icon: 'notification_icon', // 여전히 작은 아이콘은 투명한 아이콘을 사용
+    largeIcon: DrawableResourceAndroidBitmap('large_icon'),
     importance: Importance.max,
     priority: Priority.high,
   );
