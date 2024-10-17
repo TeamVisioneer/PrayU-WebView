@@ -7,12 +7,9 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 
 String? fcmToken;
 
-// Firebase 및 로컬 알림 초기화 함수
 Future<void> initFirebaseAndLocalNotifications() async {
-  // Firebase 초기화
   await Firebase.initializeApp();
 
-  // 로컬 알림 초기화(Android & iOS)
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@mipmap/ic_launcher');
 
@@ -21,7 +18,7 @@ Future<void> initFirebaseAndLocalNotifications() async {
     requestAlertPermission: true,
     requestBadgePermission: true,
     requestSoundPermission: true,
-    onDidReceiveLocalNotification: onDidReceiveLocalNotification, // 알림 수신 처리
+    onDidReceiveLocalNotification: onDidReceiveLocalNotification,
   );
 
   const InitializationSettings initializationSettings = InitializationSettings(
@@ -31,23 +28,19 @@ Future<void> initFirebaseAndLocalNotifications() async {
 
   await flutterLocalNotificationsPlugin.initialize(
     initializationSettings,
-    onDidReceiveNotificationResponse:
-        onDidReceiveNotificationResponse, // 알림 선택 시 동작
+    onDidReceiveNotificationResponse: onDidReceiveNotificationResponse,
   );
 
-  // FCM 권한 요청
   FirebaseMessaging messaging = FirebaseMessaging.instance;
-  NotificationSettings settings = await messaging.requestPermission(
+  await messaging.requestPermission(
     alert: true,
     badge: true,
     sound: true,
   );
   fcmToken = await messaging.getToken();
-  print('FCM Token: $fcmToken');
-  print('User granted permission: ${settings.authorizationStatus}');
 }
 
-// Firebase 푸시 메시지 수신 시 알림을 표시하는 함수
+// TODO: 안드로이드 채널 id, name 추가
 Future<void> showNotification(RemoteMessage message) async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
@@ -74,27 +67,21 @@ Future<void> showNotification(RemoteMessage message) async {
   );
 }
 
-// iOS: 알림 수신 시 처리
 Future<void> onDidReceiveLocalNotification(
     int id, String? title, String? body, String? payload) async {
   print('iOS Local Notification: $title - $body');
 }
 
-// 알림을 선택했을 때 처리
 void onDidReceiveNotificationResponse(
     NotificationResponse notificationResponse) {
   final String? payload = notificationResponse.payload;
   print('Notification payload: $payload');
 }
 
-// FCM 메시지 리스너 설정
 void setupFirebaseMessagingListeners() {
   FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
     if (message.notification != null) {
-      print(
-          'Message also contained a notification: ${message.notification!.title}');
-      showNotification(message); // 알림 표시
+      showNotification(message);
     }
   });
 }
