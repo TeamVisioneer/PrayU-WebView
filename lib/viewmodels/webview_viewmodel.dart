@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:prayu_webview/services/firebase_sevice.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:io';
 import '../models/webview_model.dart';
@@ -27,8 +28,27 @@ class WebViewViewModel {
           }
           return NavigationDecision.navigate;
         },
+        onPageFinished: (url) {
+          _saveFCMTokenToLocalStorage();
+        },
       ));
+
     _setUserAgentAndLoadPage();
+  }
+
+  Future<void> _saveFCMTokenToLocalStorage() async {
+    try {
+      if (fcmToken != null) {
+        _controller.runJavaScript(
+          'try { localStorage.setItem("fcmToken", "$fcmToken"); } catch (e) { console.error("Error storing FCM token:", e.message); }',
+        );
+        debugPrint("FCM token saved to localStorage: $fcmToken");
+      } else {
+        debugPrint("FCM token is null");
+      }
+    } catch (e) {
+      debugPrint("Error getting FCM token: $e");
+    }
   }
 
   void onSwipeStart(PointerDownEvent details) {
