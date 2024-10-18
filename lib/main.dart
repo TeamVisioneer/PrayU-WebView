@@ -11,8 +11,6 @@ void main() async {
     nativeAppKey: '57583aa0c3464bf71e902b9c78580e5b',
     javaScriptAppKey: '8cec546a8802b8b706beb1ffb28b0c8a',
   );
-  // 민수 알림
-  //await NotificationService.init();
 
   await initFirebaseAndLocalNotifications();
 
