@@ -21,8 +21,7 @@ class WebViewViewModel {
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(NavigationDelegate(
         onNavigationRequest: (NavigationRequest request) {
-          if (request.url.startsWith('intent://') ||
-              request.url.startsWith('intent:#')) {
+          if (request.url.startsWith('intent:')) {
             _launchIntentURL(request.url);
             return NavigationDecision.prevent;
           }
@@ -80,8 +79,18 @@ class WebViewViewModel {
     try {
       final bool result =
           await platform.invokeMethod('startSchemeIntent', {'url': url});
-      if (!result) {}
-    } on PlatformException {}
+      if (!result) {
+        String? fallbackUrl = parseKakaoIntentUrl(url);
+        if (fallbackUrl != null) {
+          _controller.loadRequest(Uri.parse(fallbackUrl));
+        }
+      }
+    } on PlatformException {
+      String? fallbackUrl = parseKakaoIntentUrl(url);
+      if (fallbackUrl != null) {
+        _controller.loadRequest(Uri.parse(fallbackUrl));
+      }
+    }
   }
 
   Future<bool> handleBackNavigation() async {
@@ -100,5 +109,33 @@ class WebViewViewModel {
         isNavigating = false;
       });
     }
+  }
+
+  String? parseKakaoIntentUrl(String intentUri) {
+    final startIndex = intentUri.indexOf('S.browser_fallback_url=');
+    if (startIndex == -1) return null;
+    final encodedFallbackUrl =
+        intentUri.substring(startIndex + 'S.browser_fallback_url='.length);
+    final fallbackUrl = Uri.decodeComponent(encodedFallbackUrl);
+    Uri parsedUri = Uri.parse(fallbackUrl);
+    String clientId = parsedUri.queryParameters['client_id'] ?? '';
+    String scope = parsedUri.queryParameters['scope'] ?? '';
+    String state = parsedUri.queryParameters['state'] ?? '';
+    String redirectUri = parsedUri.queryParameters['redirect_uri'] ?? '';
+    String responseType = parsedUri.queryParameters['response_type'] ?? '';
+    String authTranId = parsedUri.queryParameters['auth_tran_id'] ?? '';
+    String ka = parsedUri.queryParameters['ka'] ?? '';
+    String isPopup = parsedUri.queryParameters['is_popup'] ?? 'false';
+    Uri newUri = Uri.https('kauth.kakao.com', '/oauth/authorize', {
+      'client_id': clientId,
+      'scope': scope,
+      'state': state,
+      'redirect_uri': redirectUri,
+      'response_type': responseType,
+      'auth_tran_id': authTranId,
+      'ka': ka,
+      'is_popup': isPopup,
+    });
+    return newUri.toString();
   }
 }
