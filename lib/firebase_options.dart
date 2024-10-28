@@ -50,19 +50,19 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDDSyk4PzuypZC9cNe-r39bYrZheOVHrkw',
-    appId: '1:629371711383:android:05e326141fcf3c8cd5ded2',
-    messagingSenderId: '629371711383',
-    projectId: 'prayu-staging',
-    storageBucket: 'prayu-staging.appspot.com',
+    apiKey: 'AIzaSyD2y1uTxiAFrj9AN1iIoHN31vdnFgajwOc',
+    appId: '1:888904754085:android:af10feee3bb0c54bb1be4c',
+    messagingSenderId: '888904754085',
+    projectId: 'prayu-prod',
+    storageBucket: 'prayu-prod.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDn5F_Vylsuqq2kBsd_wOIjWSqiiViY2RQ',
-    appId: '1:629371711383:ios:39a3d2d97549c285d5ded2',
-    messagingSenderId: '629371711383',
-    projectId: 'prayu-staging',
-    storageBucket: 'prayu-staging.appspot.com',
+    apiKey: 'AIzaSyC1srPBuUuW1dcYR2I6_asW1YCOynhwIPw',
+    appId: '1:888904754085:ios:5b058654f1c69ac4b1be4c',
+    messagingSenderId: '888904754085',
+    projectId: 'prayu-prod',
+    storageBucket: 'prayu-prod.appspot.com',
     iosBundleId: 'com.team.visioneer.prayu',
   );
 
