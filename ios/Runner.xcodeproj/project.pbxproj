@@ -502,6 +502,8 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = 63B3RKAA2H;
 				ENABLE_BITCODE = NO;
+				FACEBOOK_APP_ID = 907249497499591;
+				FACEBOOK_CLIENT_TOKEN = 4f11c46aeec88c6c3a6f9d30d4b3790c;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = PrayU;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
@@ -692,6 +694,8 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = 63B3RKAA2H;
 				ENABLE_BITCODE = NO;
+				FACEBOOK_APP_ID = 907249497499591;
+				FACEBOOK_CLIENT_TOKEN = 4f11c46aeec88c6c3a6f9d30d4b3790c;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = PrayU;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";
@@ -720,6 +724,8 @@
 				CURRENT_PROJECT_VERSION = "$(FLUTTER_BUILD_NUMBER)";
 				DEVELOPMENT_TEAM = 63B3RKAA2H;
 				ENABLE_BITCODE = NO;
+				FACEBOOK_APP_ID = 907249497499591;
+				FACEBOOK_CLIENT_TOKEN = 4f11c46aeec88c6c3a6f9d30d4b3790c;
 				INFOPLIST_FILE = Runner/Info.plist;
 				INFOPLIST_KEY_CFBundleDisplayName = PrayU;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.social-networking";

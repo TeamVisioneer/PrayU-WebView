@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "629371711383",
-    "project_id": "prayu-staging",
-    "storage_bucket": "prayu-staging.appspot.com"
+    "project_number": "888904754085",
+    "project_id": "prayu-prod",
+    "storage_bucket": "prayu-prod.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:629371711383:android:05e326141fcf3c8cd5ded2",
+        "mobilesdk_app_id": "1:888904754085:android:af10feee3bb0c54bb1be4c",
         "android_client_info": {
           "package_name": "com.team.visioneer.prayu"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyDDSyk4PzuypZC9cNe-r39bYrZheOVHrkw"
+          "current_key": "AIzaSyD2y1uTxiAFrj9AN1iIoHN31vdnFgajwOc"
         }
       ],
       "services": {

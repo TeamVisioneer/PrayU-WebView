@@ -25,11 +25,9 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>kakao57583aa0c3464bf71e902b9c78580e5b</string>
+				<string>fb$(FACEBOOK_APP_ID)</string>
 			</array>
 		</dict>
 	</array>

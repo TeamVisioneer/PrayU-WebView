@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDn5F_Vylsuqq2kBsd_wOIjWSqiiViY2RQ</string>
+	<string>AIzaSyC1srPBuUuW1dcYR2I6_asW1YCOynhwIPw</string>
 	<key>GCM_SENDER_ID</key>
-	<string>629371711383</string>
+	<string>888904754085</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.team.visioneer.prayu</string>
 	<key>PROJECT_ID</key>
-	<string>prayu-staging</string>
+	<string>prayu-prod</string>
 	<key>STORAGE_BUCKET</key>
-	<string>prayu-staging.appspot.com</string>
+	<string>prayu-prod.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:629371711383:ios:39a3d2d97549c285d5ded2</string>
+	<string>1:888904754085:ios:5b058654f1c69ac4b1be4c</string>
 </dict>
 </plist>
