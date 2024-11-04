@@ -96,6 +96,5 @@
             <data android:mimeType="text/plain"/>
         </intent>
         <package android:name="com.kakao.talk" />
-
     </queries>
 </manifest>
