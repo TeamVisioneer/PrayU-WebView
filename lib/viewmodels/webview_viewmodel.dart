@@ -1,3 +1,4 @@
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:prayu_webview/services/firebase_sevice.dart';
@@ -30,8 +31,16 @@ class WebViewViewModel {
         onPageFinished: (url) {
           _saveFCMTokenToLocalStorage();
         },
+        onWebResourceError: (WebResourceError error) {
+          // Firebase Crashlytics에 에러 기록
+          FirebaseCrashlytics.instance.recordError(
+            error,
+            null,
+            reason: 'WebView loading error: ${error.description}',
+            fatal: true,
+          );
+        },
       ));
-
     _setUserAgentAndLoadPage();
   }
 
