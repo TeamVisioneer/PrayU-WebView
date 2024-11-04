@@ -10,6 +10,20 @@ String? fcmToken;
 Future<void> initFirebaseAndLocalNotifications() async {
   await Firebase.initializeApp();
 
+  const AndroidNotificationChannel androidNotificationChannel =
+      AndroidNotificationChannel(
+    'high_priority_channel',
+    'High Priority Notifications',
+    description: 'This channel is used for important notifications.',
+    importance: Importance.high,
+  );
+
+  // 알림 채널 생성
+  await flutterLocalNotificationsPlugin
+      .resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>()
+      ?.createNotificationChannel(androidNotificationChannel);
+
   const AndroidInitializationSettings initializationSettingsAndroid =
       AndroidInitializationSettings('@drawable/notification_icon');
 
@@ -40,15 +54,14 @@ Future<void> initFirebaseAndLocalNotifications() async {
   fcmToken = await messaging.getToken();
 }
 
-// TODO: 안드로이드 채널 id, name 추가
 Future<void> showNotification(RemoteMessage message) async {
   const AndroidNotificationDetails androidPlatformChannelSpecifics =
       AndroidNotificationDetails(
-    'your_channel_id', // 알림 채널 ID
-    'your_channel_name', // 알림 채널 이름
-    channelDescription: 'your_channel_description', // 알림 채널 설명
-    icon: 'notification_icon', // 여전히 작은 아이콘은 투명한 아이콘을 사용
-    largeIcon: DrawableResourceAndroidBitmap('large_icon'),
+    'high_priority_channel', // 채널 ID와 일치하도록 설정
+    'High Priority Notifications', // 채널 이름과 일치하도록 설정
+    channelDescription:
+        'This channel is used for important notifications.', // 알림 채널 설명
+    icon: '@drawable/notification_icon',
     importance: Importance.max,
     priority: Priority.high,
   );

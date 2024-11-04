@@ -79,6 +79,9 @@
             android:value="${FACEBOOK_APP_ID}"/>
         <meta-data android:name="com.facebook.sdk.ClientToken"
             android:value="${FACEBOOK_CLIENT_TOKEN}"/>
+            <meta-data
+    android:name="com.google.firebase.messaging.default_notification_channel_id"
+    android:value="high_priority_channel" />
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
     <!-- Required to query activities that can process text, see:
