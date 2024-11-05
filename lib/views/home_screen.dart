@@ -1,4 +1,3 @@
-import 'package:facebook_app_events/facebook_app_events.dart';
 import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../viewmodels/webview_viewmodel.dart';
@@ -8,9 +7,8 @@ class HomeScreen extends StatefulWidget {
   _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
+class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   final WebViewViewModel _viewModel = WebViewViewModel();
-  static final facebookAppEvents = FacebookAppEvents();
 
   double initialSwipePosition = 0.0;
   double swipeThreshold = 120.0;
@@ -19,13 +17,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this); //
     _viewModel.initWebView();
-    facebookAppEvents.logEvent(
-      name: 'HomeScreen_Opened',
-      parameters: {
-        'screen': 'HomeScreen',
-      },
-    );
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _viewModel.controller.reload();
+    }
   }
 
   @override
