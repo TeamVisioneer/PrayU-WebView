@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this); //
-    _viewModel.initWebView();
+    _viewModel.initWebView(context);
   }
 
   @override
