@@ -75,6 +75,24 @@ Future<void> initFirebaseAndLocalNotifications() async {
 
     fcmToken = await messaging.getToken();
   }
+  for (int attempt = 0; attempt < 3; attempt++) {
+    apnsToken = await messaging.getAPNSToken();
+    if (apnsToken != null) {
+      break;
+    }
+    print(
+        "Attempt $attempt: APNs token not available yet, retrying in 2 seconds...");
+    await Future.delayed(Duration(seconds: 2));
+  }
+
+  if (apnsToken == null) {
+    print(
+        "Failed to retrieve APNs token after multiple attempts. Please check APNs configuration.");
+  } else {
+    print("APNs token retrieved successfully: $apnsToken");
+  }
+
+  fcmToken = await messaging.getToken();
 }
 
 Future<void> showNotification(RemoteMessage message) async {
