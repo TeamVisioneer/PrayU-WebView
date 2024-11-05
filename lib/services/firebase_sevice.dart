@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +9,6 @@ final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
 String? fcmToken;
 
 Future<void> initFirebaseAndLocalNotifications() async {
-  await Firebase.initializeApp();
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
 
   const AndroidNotificationChannel androidNotificationChannel =
@@ -54,6 +52,26 @@ Future<void> initFirebaseAndLocalNotifications() async {
     badge: true,
     sound: true,
   );
+
+  // APNs 토큰 가져오기 시도
+  String? apnsToken;
+  for (int attempt = 0; attempt < 3; attempt++) {
+    apnsToken = await messaging.getAPNSToken();
+    if (apnsToken != null) {
+      break;
+    }
+    print(
+        "Attempt $attempt: APNs token not available yet, retrying in 2 seconds...");
+    await Future.delayed(Duration(seconds: 2));
+  }
+
+  if (apnsToken == null) {
+    print(
+        "Failed to retrieve APNs token after multiple attempts. Please check APNs configuration.");
+  } else {
+    print("APNs token retrieved successfully: $apnsToken");
+  }
+
   fcmToken = await messaging.getToken();
 }
 
