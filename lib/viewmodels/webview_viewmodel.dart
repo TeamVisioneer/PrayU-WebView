@@ -2,6 +2,7 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:prayu_webview/services/firebase_sevice.dart';
+import 'package:prayu_webview/views/show_network_error.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import 'dart:io';
 import '../models/webview_model.dart';
@@ -14,10 +15,12 @@ class WebViewViewModel {
   double initialSwipePosition = 0.0;
   double swipeThreshold = 120.0;
   bool isNavigating = false;
+  int retryCount = 0;
+  final int maxRetryAttempts = 3;
 
   WebViewController get controller => _controller;
 
-  void initWebView() {
+  void initWebView(BuildContext context) {
     _controller = WebViewController()
       ..setJavaScriptMode(JavaScriptMode.unrestricted)
       ..setNavigationDelegate(NavigationDelegate(
@@ -31,14 +34,20 @@ class WebViewViewModel {
         onPageFinished: (url) {
           _saveFCMTokenToLocalStorage();
         },
-        onWebResourceError: (WebResourceError error) {
-          // Firebase Crashlytics에 에러 기록
-          FirebaseCrashlytics.instance.recordError(
-            error,
-            null,
-            reason: 'WebView loading error: ${error.description}',
-            fatal: true,
-          );
+        onWebResourceError: (WebResourceError error) async {
+          if (retryCount < maxRetryAttempts) {
+            retryCount++;
+            await Future.delayed(const Duration(seconds: 1));
+            _setUserAgentAndLoadPage();
+          } else {
+            FirebaseCrashlytics.instance.recordError(
+              error,
+              null,
+              reason: 'WebView loading error: ${error.description}',
+              fatal: true,
+            );
+            showNetworkError(context);
+          }
         },
       ));
     _setUserAgentAndLoadPage();
@@ -50,12 +59,12 @@ class WebViewViewModel {
         _controller.runJavaScript(
           'try { localStorage.setItem("fcmToken", "$fcmToken"); } catch (e) { console.error("Error storing FCM token:", e.message); }',
         );
-        debugPrint("FCM token saved to localStorage: $fcmToken");
+        //debugPrint("FCM token saved to localStorage: $fcmToken");
       } else {
-        debugPrint("FCM token is null");
+        //debugPrint("FCM token is null");
       }
     } catch (e) {
-      debugPrint("Error getting FCM token: $e");
+      //debugPrint("Error getting FCM token: $e");
     }
   }
 
