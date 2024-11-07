@@ -59,12 +59,12 @@ class WebViewViewModel {
         _controller.runJavaScript(
           'try { localStorage.setItem("fcmToken", "$fcmToken"); } catch (e) { console.error("Error storing FCM token:", e.message); }',
         );
-        debugPrint("FCM token saved to localStorage: $fcmToken");
+        //debugPrint("FCM token saved to localStorage: $fcmToken");
       } else {
-        debugPrint("FCM token is null");
+        //debugPrint("FCM token is null");
       }
     } catch (e) {
-      debugPrint("Error getting FCM token: $e");
+      //debugPrint("Error getting FCM token: $e");
     }
   }
 
