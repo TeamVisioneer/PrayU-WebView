@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
@@ -55,24 +57,26 @@ Future<void> initFirebaseAndLocalNotifications() async {
 
   // APNs 토큰 가져오기 시도
   String? apnsToken;
-  for (int attempt = 0; attempt < 3; attempt++) {
-    apnsToken = await messaging.getAPNSToken();
-    if (apnsToken != null) {
-      break;
+  if (Platform.isIOS) {
+    for (int attempt = 0; attempt < 3; attempt++) {
+      apnsToken = await messaging.getAPNSToken();
+      if (apnsToken != null) {
+        break;
+      }
+      print(
+          "Attempt $attempt: APNs token not available yet, retrying in 2 seconds...");
+      await Future.delayed(Duration(seconds: 2));
     }
-    print(
-        "Attempt $attempt: APNs token not available yet, retrying in 2 seconds...");
-    await Future.delayed(Duration(seconds: 2));
-  }
 
-  if (apnsToken == null) {
-    print(
-        "Failed to retrieve APNs token after multiple attempts. Please check APNs configuration.");
-  } else {
-    print("APNs token retrieved successfully: $apnsToken");
-  }
+    if (apnsToken == null) {
+      print(
+          "Failed to retrieve APNs token after multiple attempts. Please check APNs configuration.");
+    } else {
+      print("APNs token retrieved successfully: $apnsToken");
+    }
 
-  fcmToken = await messaging.getToken();
+    fcmToken = await messaging.getToken();
+  }
 }
 
 Future<void> showNotification(RemoteMessage message) async {
