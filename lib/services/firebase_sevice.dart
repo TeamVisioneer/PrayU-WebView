@@ -64,6 +64,7 @@ Future<void> initFirebaseAndLocalNotifications() async {
         break;
       }
 <<<<<<< HEAD
+<<<<<<< HEAD
       //print("Attempt $attempt: APNs token not available yet, retrying in 2 seconds...");
       await Future.delayed(Duration(seconds: 2));
     }
@@ -83,15 +84,17 @@ Future<void> initFirebaseAndLocalNotifications() async {
 =======
       print(
           "Attempt $attempt: APNs token not available yet, retrying in 2 seconds...");
+=======
+      //print("Attempt $attempt: APNs token not available yet, retrying in 2 seconds...");
+>>>>>>> 48d4b5d (fix: kakao sdk 제거)
       await Future.delayed(Duration(seconds: 2));
 >>>>>>> e3c8ccd (design: 안드로이드 이미지 이름 변경 + IOS일 때만 APNs key 불러오기)
     }
 
     if (apnsToken == null) {
-      print(
-          "Failed to retrieve APNs token after multiple attempts. Please check APNs configuration.");
+      //print("Failed to retrieve APNs token after multiple attempts. Please check APNs configuration.");
     } else {
-      print("APNs token retrieved successfully: $apnsToken");
+      //print("APNs token retrieved successfully: $apnsToken");
     }
 
     fcmToken = await messaging.getToken();
