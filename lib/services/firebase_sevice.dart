@@ -63,6 +63,7 @@ Future<void> initFirebaseAndLocalNotifications() async {
       if (apnsToken != null) {
         break;
       }
+<<<<<<< HEAD
       //print("Attempt $attempt: APNs token not available yet, retrying in 2 seconds...");
       await Future.delayed(Duration(seconds: 2));
     }
@@ -79,20 +80,22 @@ Future<void> initFirebaseAndLocalNotifications() async {
     apnsToken = await messaging.getAPNSToken();
     if (apnsToken != null) {
       break;
+=======
+      print(
+          "Attempt $attempt: APNs token not available yet, retrying in 2 seconds...");
+      await Future.delayed(Duration(seconds: 2));
+>>>>>>> e3c8ccd (design: 안드로이드 이미지 이름 변경 + IOS일 때만 APNs key 불러오기)
     }
-    print(
-        "Attempt $attempt: APNs token not available yet, retrying in 2 seconds...");
-    await Future.delayed(Duration(seconds: 2));
-  }
 
-  if (apnsToken == null) {
-    print(
-        "Failed to retrieve APNs token after multiple attempts. Please check APNs configuration.");
-  } else {
-    print("APNs token retrieved successfully: $apnsToken");
-  }
+    if (apnsToken == null) {
+      print(
+          "Failed to retrieve APNs token after multiple attempts. Please check APNs configuration.");
+    } else {
+      print("APNs token retrieved successfully: $apnsToken");
+    }
 
-  fcmToken = await messaging.getToken();
+    fcmToken = await messaging.getToken();
+  }
 }
 
 Future<void> showNotification(RemoteMessage message) async {
