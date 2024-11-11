@@ -41,6 +41,7 @@ dependencies:
   facebook_app_events: ^0.19.3
   provider: ^6.1.2
   http: ^1.2.2
+  kakao_flutter_sdk: ^1.9.6
 
   # The follwing adds are for local notification
   # permission_handler: ^11.1.0
