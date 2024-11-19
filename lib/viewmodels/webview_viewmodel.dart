@@ -1,9 +1,11 @@
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:photo_manager/photo_manager.dart';
 import 'package:prayu_webview/services/firebase_sevice.dart';
 import 'package:prayu_webview/views/show_network_error.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+import 'package:http/http.dart' as http;
+import 'package:flutter/material.dart';
 import 'dart:io';
 import '../models/webview_model.dart';
 
@@ -28,6 +30,11 @@ class WebViewViewModel {
           if (request.url.startsWith('intent:')) {
             _launchIntentURL(request.url);
             return NavigationDecision.prevent;
+          }
+          // 이미지 다운로드 처리
+          if (_isImageURL(request.url)) {
+            _downloadImage(request.url, context);
+            return NavigationDecision.prevent; // WebView에서 열지 않음
           }
           return NavigationDecision.navigate;
         },
@@ -155,5 +162,50 @@ class WebViewViewModel {
       'is_popup': isPopup,
     });
     return newUri.toString();
+  }
+
+  /// 특정 URL이 이미지 파일인지 확인하는 함수
+  bool _isImageURL(String url) {
+    return url.endsWith('.jpg') ||
+        url.endsWith('.jpeg') ||
+        url.endsWith('.png') ||
+        url.endsWith('.gif');
+  }
+
+  /// 이미지 다운로드 처리 함수
+  Future<void> _downloadImage(String url, BuildContext context) async {
+    try {
+      // HTTP 요청으로 이미지 다운로드
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        // 사진 저장 권한 요청
+        final PermissionState permission =
+            await PhotoManager.requestPermissionExtend();
+        if (permission.isAuth) {
+          // 이미지를 갤러리에 저장
+          await PhotoManager.editor.saveImage(
+            response.bodyBytes,
+            filename: "biblecard",
+          );
+
+          // 다운로드 성공 메시지
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('이미지가 갤러리에 저장되었습니다.'),
+          ));
+        } else {
+          // 권한 거부 처리
+          ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+            content: Text('사진 저장 권한이 필요합니다. 설정에서 권한을 허용해주세요.'),
+          ));
+        }
+      } else {
+        throw Exception('이미지 다운로드 실패: ${response.statusCode}');
+      }
+    } catch (e) {
+      // 다운로드 실패 메시지
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text('이미지 저장에 실패했습니다: $e'),
+      ));
+    }
   }
 }
