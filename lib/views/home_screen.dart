@@ -30,13 +30,6 @@ class _HomeScreenState extends State<HomeScreen> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed && Platform.isIOS) {
-      _viewModel.controller.reload();
-    }
-  }
-
-  @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
 
