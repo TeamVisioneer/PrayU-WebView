@@ -19,6 +19,7 @@ class WebViewViewModel {
   bool isNavigating = false;
   int retryCount = 0;
   final int maxRetryAttempts = 3;
+  bool _isFCMTokenSaved = false;
 
   WebViewController get controller => _controller;
 
@@ -39,7 +40,11 @@ class WebViewViewModel {
           return NavigationDecision.navigate;
         },
         onPageFinished: (url) {
-          _saveFCMTokenToLocalStorage();
+          if (!_isFCMTokenSaved) {
+            // 처음 한 번만 실행
+            _saveFCMTokenToLocalStorage();
+            _isFCMTokenSaved = true; // 실행 후 플래그 변경
+          }
         },
         onWebResourceError: (WebResourceError error) async {
           if (retryCount < maxRetryAttempts) {
@@ -64,14 +69,11 @@ class WebViewViewModel {
     try {
       if (fcmToken != null) {
         _controller.runJavaScript(
-          'try { localStorage.setItem("fcmToken", "$fcmToken"); localStorage.setItem("sb-qggewtakkrwcclyxtxnz-auth-token", `{"access_token":"eyJhbGciOiJIUzI1NiIsImtpZCI6Imc0aHVEeWwzVC9SRklSNVciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3FnZ2V3dGFra3J3Y2NseXh0eG56LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJlY2MwNGFiYy1jZmZmLTQxODctYjJlZS02Y2E5MzdkZmNhYzYiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzMyMDg2MDk4LCJpYXQiOjE3MzIwODI0OTgsImVtYWlsIjoidGVzdC52aXNpb25lZXIxNUBnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImVtYWlsIjoidGVzdC52aXNpb25lZXIxNUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiZWNjMDRhYmMtY2ZmZi00MTg3LWIyZWUtNmNhOTM3ZGZjYWM2In0sInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoicGFzc3dvcmQiLCJ0aW1lc3RhbXAiOjE3MzIwODI0OTh9XSwic2Vzc2lvbl9pZCI6ImUzYTdmZWQxLTc1NWItNDI4MS1hODJlLTdmY2M2NzVjMDFlYSIsImlzX2Fub255bW91cyI6ZmFsc2V9.y4ZFUCWUkF6AtJAYFWzNKZmvD2lgf3U_UNGkTAhCMQU","token_type":"bearer","expires_in":3600,"expires_at":1732086098,"refresh_token":"i_DEgqST892kBm8f2GmkFQ","user":{"id":"ecc04abc-cfff-4187-b2ee-6ca937dfcac6","aud":"authenticated","role":"authenticated","email":"test.visioneer15@gmail.com","email_confirmed_at":"2024-09-25T15:41:01.004331Z","phone":"","confirmation_sent_at":"2024-09-25T15:40:11.340592Z","confirmed_at":"2024-09-25T15:41:01.004331Z","last_sign_in_at":"2024-11-20T06:01:38.523568177Z","app_metadata":{"provider":"email","providers":["email"]},"user_metadata":{"email":"test.visioneer15@gmail.com","email_verified":false,"phone_verified":false,"sub":"ecc04abc-cfff-4187-b2ee-6ca937dfcac6"},"identities":[{"identity_id":"c9907c18-333a-4183-afad-219d32ead91b","id":"ecc04abc-cfff-4187-b2ee-6ca937dfcac6","user_id":"ecc04abc-cfff-4187-b2ee-6ca937dfcac6","identity_data":{"email":"test.visioneer15@gmail.com","email_verified":false,"phone_verified":false,"sub":"ecc04abc-cfff-4187-b2ee-6ca937dfcac6"},"provider":"email","last_sign_in_at":"2024-09-25T15:40:11.336684Z","created_at":"2024-09-25T15:40:11.336735Z","updated_at":"2024-09-25T15:40:11.336735Z","email":"test.visioneer15@gmail.com"}],"created_at":"2024-09-25T15:40:11.326379Z","updated_at":"2024-11-20T06:01:38.53249Z","is_anonymous":false}}`)} catch (e) { console.error("Error storing FCM token:", e.message); }',
+          'try { localStorage.setItem("fcmToken", "$fcmToken"); localStorage.setItem("sb-qggewtakkrwcclyxtxnz-auth-token", `{"access_token":"eyJhbGciOiJIUzI1NiIsImtpZCI6Imc0aHVEeWwzVC9SRklSNVciLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3FnZ2V3dGFra3J3Y2NseXh0eG56LnN1cGFiYXNlLmNvL2F1dGgvdjEiLCJzdWIiOiJlY2MwNGFiYy1jZmZmLTQxODctYjJlZS02Y2E5MzdkZmNhYzYiLCJhdWQiOiJhdXRoZW50aWNhdGVkIiwiZXhwIjoxNzMyMjYxMTcyLCJpYXQiOjE3MzIyNTc1NzIsImVtYWlsIjoidGVzdC52aXNpb25lZXIxNUBnbWFpbC5jb20iLCJwaG9uZSI6IiIsImFwcF9tZXRhZGF0YSI6eyJwcm92aWRlciI6ImVtYWlsIiwicHJvdmlkZXJzIjpbImVtYWlsIl19LCJ1c2VyX21ldGFkYXRhIjp7ImVtYWlsIjoidGVzdC52aXNpb25lZXIxNUBnbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsInBob25lX3ZlcmlmaWVkIjpmYWxzZSwic3ViIjoiZWNjMDRhYmMtY2ZmZi00MTg3LWIyZWUtNmNhOTM3ZGZjYWM2In0sInJvbGUiOiJhdXRoZW50aWNhdGVkIiwiYWFsIjoiYWFsMSIsImFtciI6W3sibWV0aG9kIjoicGFzc3dvcmQiLCJ0aW1lc3RhbXAiOjE3MzIyNTc1NzJ9XSwic2Vzc2lvbl9pZCI6IjY2YjdiOTdmLWFkM2ItNGYwYS04OGYwLTlmZDQ5MzM4OTg4NSIsImlzX2Fub255bW91cyI6ZmFsc2V9.QQSoXBT8ez3uAbzk_HILdhEXzTWv2SIHnbGTfuwMCfI","token_type":"bearer","expires_in":3600,"expires_at":1732261172,"refresh_token":"Aj3n4X3348MYvQyb32Pp5Q","user":{"id":"ecc04abc-cfff-4187-b2ee-6ca937dfcac6","aud":"authenticated","role":"authenticated","email":"test.visioneer15@gmail.com","email_confirmed_at":"2024-09-25T15:41:01.004331Z","phone":"","confirmation_sent_at":"2024-09-25T15:40:11.340592Z","confirmed_at":"2024-09-25T15:41:01.004331Z","last_sign_in_at":"2024-11-22T06:39:32.394951091Z","app_metadata":{"provider":"email","providers":["email"]},"user_metadata":{"email":"test.visioneer15@gmail.com","email_verified":false,"phone_verified":false,"sub":"ecc04abc-cfff-4187-b2ee-6ca937dfcac6"},"identities":[{"identity_id":"c9907c18-333a-4183-afad-219d32ead91b","id":"ecc04abc-cfff-4187-b2ee-6ca937dfcac6","user_id":"ecc04abc-cfff-4187-b2ee-6ca937dfcac6","identity_data":{"email":"test.visioneer15@gmail.com","email_verified":false,"phone_verified":false,"sub":"ecc04abc-cfff-4187-b2ee-6ca937dfcac6"},"provider":"email","last_sign_in_at":"2024-09-25T15:40:11.336684Z","created_at":"2024-09-25T15:40:11.336735Z","updated_at":"2024-09-25T15:40:11.336735Z","email":"test.visioneer15@gmail.com"}],"created_at":"2024-09-25T15:40:11.326379Z","updated_at":"2024-11-22T06:39:32.420316Z","is_anonymous":false}}`)} catch (e) { console.error("Error storing FCM token:", e.message); }',
         );
-        //debugPrint("FCM token saved to localStorage: $fcmToken");
-      } else {
-        //debugPrint("FCM token is null");
       }
     } catch (e) {
-      //debugPrint("Error getting FCM token: $e");
+      debugPrint("Error getting FCM token: $e");
     }
   }
 
